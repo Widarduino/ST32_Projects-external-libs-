@@ -64,7 +64,7 @@ uint8_t usbTxBuff[USB_BUFLEN];
 uint16_t usbTxBufLen;
 
 uint8_t usbRxBuff[USB_BUFLEN];
-uint16_t usbRXBufLen;
+uint16_t usbRXBufLen = 0;
 uint8_t usbRXFlag =0;
 
 typedef struct{
@@ -170,6 +170,9 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+
+    LCDWriteRXBuf(usbRxBuff,usbRXBufLen);
+
     if (usbRXFlag && usbRXBufLen){  // while ready and buffer has content
       usbTxBufLen = snprintf((char *)usbTxBuff, USB_BUFLEN, "[%s]:%d \r\n",usbRxBuff,usbRXBufLen);
       // the send buffer will copy the RX data, under the format "bytes received: length : content"
@@ -177,9 +180,7 @@ int main(void)
 
       memset(usbTxBuff,0,sizeof(usbTxBuff)); // reset tx buffer
       usbRXFlag = 0;
-      usbRXBufLen = 0;
-
-    }
+    } 
   }
   /* USER CODE END 3 */
 }
@@ -341,10 +342,25 @@ void LCD_LEDConfig(uint8_t Value){
 
 
 void LCDWriteRXBuf(uint8_t *Buf, uint32_t length){
-  for (int i = 0 ; i < length ; i++ ){
-    //LCDWrite(, (uint8_t)Buf[i]);
 
-  } 
+  switch (length){
+  
+    case 1:
+    LCDWrite(DIGIT4, Buf[0] - 48);
+    break;
+    case 2:
+    LCDWrite(DIGIT3, Buf[0] - 48);
+    LCDWrite(DIGIT4, Buf[1] - 48);
+    break;
+    case 3:
+    LCDWrite(DIGIT2, Buf[0] - 48);
+    LCDWrite(DIGIT3, Buf[1] - 48);
+    LCDWrite(DIGIT4, Buf[2] - 48);
+    break;
+    default:
+    LCDWrite(DIGIT1, 0);
+}
+
 }
 void DelayUS(TIM_HandleTypeDef *tim , uint8_t time){
 
