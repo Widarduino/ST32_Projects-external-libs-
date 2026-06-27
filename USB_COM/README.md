@@ -1,3 +1,5 @@
+# 1) Laptop Battery Monitor
+
 -- TO USE: 
 1) flash .elf file inside build
 2) connect stm32 via usb
