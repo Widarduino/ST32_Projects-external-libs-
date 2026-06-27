@@ -8,4 +8,4 @@
 ![image](./Prototype.jpg)
 *breadboard prototype*
 ![image](./segment_display.png)
-*LCD wiring*
+*LCD wiring(for stm32f103 dev board)*
